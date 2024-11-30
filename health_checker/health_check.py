@@ -26,6 +26,7 @@ def main():
     env.validate()
     old_time = time.time()
     response = None
+    err = None
 
     while time.time() - old_time < env.timeout:
         try:
@@ -33,11 +34,13 @@ def main():
             if response.status_code == 404 or response.status_code == 200:
                 _loger.info("Successfully connected to the server", response.status_code)
                 exit(0)
-        except Exception:
-            _loger.exception("couldn't connect to the server")
+        except Exception as error:
+            _loger.warning("Connecting to the server %s", env.url)
             if response:
                 _loger.warning("Response status is %s", response.status_code)
             time.sleep(env.sleep_duration)
+            err = error
+    _loger.error("Error on connecting the server : %s", err)
     exit(1)
 
 if __name__ == "__main__":
