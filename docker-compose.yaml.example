@@ -1,0 +1,8 @@
+services:
+  health_checker:
+    build:
+      context: ./health_checker
+    volumes:
+      - ./conf:/build/data
+    env_file:
+      - ./.env.health_checker
